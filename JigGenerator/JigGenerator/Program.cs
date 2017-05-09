@@ -1,4 +1,5 @@
 ﻿using JigGenerator.Drawing;
+using JigGenerator.Drawing.Parts;
 using Svg;
 using Svg.Transforms;
 using System;
@@ -33,6 +34,10 @@ namespace JigGenerator
             bigTurret.Create();
             bigTurret.Transforms.Add(new SvgTranslate(p1Size * 2 / 3, p1Size * 2 / 3));
             doc.Children.Add(bigTurret);
+
+            var protractor = new Protractor(boltDiameter);
+            protractor.Create();
+            doc.Children.Add(protractor);
             
             File.WriteAllText(@"c:\temp\Drawing.svg", doc.GetXML());
         }

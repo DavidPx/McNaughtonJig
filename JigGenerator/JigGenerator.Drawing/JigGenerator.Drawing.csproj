@@ -45,6 +45,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IPart.cs" />
+    <Compile Include="Parts\Pointer.cs" />
+    <Compile Include="Parts\Protractor.cs" />
+    <Compile Include="Primitives\Arcs.cs" />
     <Compile Include="Primitives\Circles.cs" />
     <Compile Include="Primitives\Colors.cs" />
     <Compile Include="Constants.cs" />
@@ -52,8 +55,8 @@
     <Compile Include="Primitives\Text.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Primitives\Units.cs" />
-    <Compile Include="Spacer.cs" />
-    <Compile Include="TurretMount.cs" />
+    <Compile Include="Parts\Spacer.cs" />
+    <Compile Include="Parts\TurretMount.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

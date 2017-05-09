@@ -3,7 +3,7 @@ using Svg;
 using Svg.Transforms;
 using System;
 
-namespace JigGenerator.Drawing
+namespace JigGenerator.Drawing.Parts
 {
     public class TurretMount : Spacer, IPart
     {

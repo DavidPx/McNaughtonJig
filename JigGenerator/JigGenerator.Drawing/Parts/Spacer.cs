@@ -5,7 +5,7 @@ using Svg.Transforms;
 using Svg.Pathing;
 using System.Collections.Generic;
 
-namespace JigGenerator.Drawing
+namespace JigGenerator.Drawing.Parts
 {
     public class Spacer : SvgGroup, IPart
     {
