@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DegreeTrig.cs" />
     <Compile Include="IPart.cs" />
     <Compile Include="Parts\Pointer.cs" />
     <Compile Include="Parts\Protractor.cs" />

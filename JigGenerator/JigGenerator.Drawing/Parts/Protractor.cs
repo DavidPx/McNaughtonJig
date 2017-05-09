@@ -39,14 +39,14 @@ namespace JigGenerator.Drawing.Parts
             // Baseline is the bottom hole
             var hole = Circles.CutCircle(fastenerDiameter, 0, 0);
 
-            var endCapRadius = fastenerDiameter / 2f;
-            var innerArcRadius = Constants.JigHoleSpacing - (fastenerDiameter / 2f);
-            var outerArcRadius = Constants.JigHoleSpacing + (fastenerDiameter / 2f);
+            var endCapRadius = fastenerDiameter / 2f - Constants.Kerf;
+            var innerArcRadius = Constants.JigHoleSpacing - (fastenerDiameter / 2f - Constants.Kerf);
+            var outerArcRadius = Constants.JigHoleSpacing + (fastenerDiameter / 2f - Constants.Kerf);
 
-            float innerArcX = innerArcRadius * (float)Math.Cos(30 * radiansPerDegree);
-            float innerArcY = -innerArcRadius * (float)Math.Sin(30 * radiansPerDegree); // y's are negative b/c they are above the origin hole
-            float outerArcX = outerArcRadius * (float)Math.Cos(30 * radiansPerDegree);
-            float outerArcY = -outerArcRadius * (float)Math.Sin(30 * radiansPerDegree);
+            float innerArcX = innerArcRadius * DegreeTrig.Cos(30);
+            float innerArcY = -innerArcRadius * DegreeTrig.Sin(30); // y's are negative b/c they are above the origin hole
+            float outerArcX = outerArcRadius * DegreeTrig.Cos(30);
+            float outerArcY = -outerArcRadius * DegreeTrig.Sin(30);
 
             var pointA = new PointF(-outerArcX.Px(), outerArcY.Px());
             var pointB = new PointF(outerArcX.Px(), outerArcY.Px());
