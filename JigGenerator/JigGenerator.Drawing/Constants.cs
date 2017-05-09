@@ -11,7 +11,7 @@ namespace JigGenerator.Drawing
         /// <summary>
         /// The laser's kerf
         /// </summary>
-        internal const float Kerf = 0.01f;
+        internal const float Kerf = 0.1f;
 
         /// <summary>
         /// How far apart the two main assembly holes are.

@@ -35,7 +35,7 @@ namespace JigGenerator
             bigTurret.Transforms.Add(new SvgTranslate(p1Size * 2 / 3, p1Size * 2 / 3));
             doc.Children.Add(bigTurret);
 
-            var protractor = new Protractor(boltDiameter);
+            var protractor = new Protractor(boltDiameter, 12, 10);
             protractor.Create();
             doc.Children.Add(protractor);
             
