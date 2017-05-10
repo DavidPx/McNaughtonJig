@@ -10,5 +10,7 @@ namespace JigGenerator.Drawing.Parts
         {
             FastenerDiameter = fastenerDiameter;
         }
+
+        public abstract void Create();
     }
 }

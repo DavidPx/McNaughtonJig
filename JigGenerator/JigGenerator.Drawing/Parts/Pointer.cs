@@ -9,13 +9,20 @@ namespace JigGenerator.Drawing.Parts
 
         public Pointer(float fastenerDiameter) : base(fastenerDiameter)
         {
-            
+            Create();
+        }
+
+        public Pointer(float fastenerDiameter, int[] radii)
+            : this(fastenerDiameter)
+        {
+            if (radii.Length < 1)
+                throw new ArgumentException(nameof(radii), "Enter more than one cutter radius");
         }
 
         
-        public void Create()
+        public override void Create()
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

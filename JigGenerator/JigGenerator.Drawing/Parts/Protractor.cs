@@ -52,7 +52,7 @@ namespace JigGenerator.Drawing.Parts
             this.armLength = armLength;
         }
 
-        public void Create()
+        public override void Create()
         {
             // Baseline is the bottom hole because most shapes are arcs with it as their center
             Children.Add(Circles.CutCircle(FastenerDiameter, 0, 0));

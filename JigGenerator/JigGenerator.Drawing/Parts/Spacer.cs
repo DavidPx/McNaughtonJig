@@ -15,7 +15,7 @@ namespace JigGenerator.Drawing.Parts
         {
             this.Label = label;
         }
-        public virtual void Create()
+        public override void Create()
         {
             Children.Add(new SvgTitle { Content = Label });
 
