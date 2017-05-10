@@ -1,6 +1,21 @@
-﻿namespace JigGenerator.Drawing.Parts
+﻿using Svg;
+using System;
+
+namespace JigGenerator.Drawing.Parts
 {
-    class Pointer
+    public class Pointer : Part
     {
+        int[] radii;
+
+        public Pointer(float fastenerDiameter) : base(fastenerDiameter)
+        {
+            
+        }
+
+        
+        public void Create()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

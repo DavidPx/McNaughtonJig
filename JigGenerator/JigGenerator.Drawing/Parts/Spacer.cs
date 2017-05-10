@@ -5,16 +5,14 @@ using System.Collections.Generic;
 
 namespace JigGenerator.Drawing.Parts
 {
-    public class Spacer : SvgGroup, IPart
+    public class Spacer : Part
     {
         private static int idCounter = 0;
-
-        private float fastenerDiameter;
         protected string Label;
         
         public Spacer(float fastenerDiameter, string label)
+            : base(fastenerDiameter)
         {
-            this.fastenerDiameter = fastenerDiameter;
             this.Label = label;
         }
         public virtual void Create()
@@ -22,7 +20,7 @@ namespace JigGenerator.Drawing.Parts
             Children.Add(new SvgTitle { Content = Label });
 
             // 0,0 circle
-            SvgCircle circle = Circles.CutCircle(fastenerDiameter, 0, 0);
+            SvgCircle circle = Circles.CutCircle(FastenerDiameter, 0, 0);
 
             base.Children.Add(circle);
             var u = circle.CreateReference(0, Constants.JigHoleSpacing);

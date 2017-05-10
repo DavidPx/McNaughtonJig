@@ -3,7 +3,7 @@ using Svg.Transforms;
 
 namespace JigGenerator.Drawing.Parts
 {
-    public class TurretMount : Spacer, IPart
+    public class TurretMount : Spacer
     {
         /* Post distance is the measured space between the outer edges of the adjoining posts.
          *  

@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace JigGenerator.Drawing.Parts
 {
-    public class Protractor : SvgGroup, IPart
+    public class Protractor : Part
     {
         private float armLength;
         private const float baseWidth = 109f * 2;
@@ -18,8 +18,7 @@ namespace JigGenerator.Drawing.Parts
         private const float majorDivisionLength = 7f;
         private const float minorDivisionLength = 4f;
         private const float textHeight = 4f;
-
-        private float fastenerDiameter;
+        
         private ushort majorDivisions;
         private ushort minorDivisions;
 
@@ -27,14 +26,14 @@ namespace JigGenerator.Drawing.Parts
         private float textBaselineRadius;
         
         public Protractor(float fastenerDiameter, ushort majorDivisions, ushort minorDivisions)
+            : base(fastenerDiameter)
         {
             armLength = 0;
-            this.fastenerDiameter = fastenerDiameter;
             
             this.majorDivisions = majorDivisions;
             this.minorDivisions = minorDivisions;
 
-            outerArcRadius = Constants.JigHoleSpacing + (fastenerDiameter / 2f - Constants.Kerf);
+            outerArcRadius = Constants.JigHoleSpacing + (FastenerDiameter / 2f - Constants.Kerf);
 
             // put the text a comfortable distance away from the slot
             textBaselineRadius = outerArcRadius + 2f;
@@ -56,7 +55,7 @@ namespace JigGenerator.Drawing.Parts
         public void Create()
         {
             // Baseline is the bottom hole because most shapes are arcs with it as their center
-            Children.Add(Circles.CutCircle(fastenerDiameter, 0, 0));
+            Children.Add(Circles.CutCircle(FastenerDiameter, 0, 0));
             Children.Add(CreateAngleMarks());
             Children.Add(CreateSlotPath());
             Children.Add(CreateAngleText());
@@ -171,8 +170,8 @@ namespace JigGenerator.Drawing.Parts
 
         private SvgPath CreateSlotPath()
         {
-            var endCapRadius = fastenerDiameter / 2f - Constants.Kerf;
-            var innerArcRadius = Constants.JigHoleSpacing - (fastenerDiameter / 2f - Constants.Kerf);
+            var endCapRadius = FastenerDiameter / 2f - Constants.Kerf;
+            var innerArcRadius = Constants.JigHoleSpacing - (FastenerDiameter / 2f - Constants.Kerf);
             
             float innerArcX = innerArcRadius * DegreeTrig.Cos(startAngle);
             float innerArcY = -innerArcRadius * DegreeTrig.Sin(startAngle); // y's are negative b/c they are above the origin hole
@@ -201,8 +200,8 @@ namespace JigGenerator.Drawing.Parts
         {
             return new SvgArcSegment(
                             new PointF(startX.Px(), startY.Px()),
-                            fastenerDiameter / 2f,
-                            fastenerDiameter / 2f,
+                            FastenerDiameter / 2f,
+                            FastenerDiameter / 2f,
                             0f,// 180 * (float)radiansPerDegree,
                             SvgArcSize.Small,
                             SvgArcSweep.Positive,

@@ -45,7 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DegreeTrig.cs" />
-    <Compile Include="IPart.cs" />
+    <Compile Include="Parts\Part.cs" />
     <Compile Include="Parts\Pointer.cs" />
     <Compile Include="Parts\Protractor.cs" />
     <Compile Include="Primitives\Arcs.cs" />
