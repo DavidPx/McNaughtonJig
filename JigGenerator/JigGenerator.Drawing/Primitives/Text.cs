@@ -1,9 +1,4 @@
 ﻿using Svg;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JigGenerator.Drawing.Primitives
 {
@@ -11,17 +6,15 @@ namespace JigGenerator.Drawing.Primitives
     {
         internal static SvgText EtchedText(string text, float fontSize)
         {
-            var label = new SvgText(text)
+            // TODO: instead return a few paths that look like letters
+            return new SvgText(text)
             {
                 FontSize = Units.Mm(fontSize),
-                TextAnchor = SvgTextAnchor.Middle
+                TextAnchor = SvgTextAnchor.Middle,
+                Fill = SvgPaintServer.None,
+                Stroke = Colors.Etch(),
+                StrokeWidth = Units.Mm(Constants.Kerf)
             };
-            label.Fill = SvgPaintServer.None;
-            label.Stroke = Colors.Etch();
-            label.StrokeWidth = Units.Mm(Constants.Kerf);
-
-
-            return label;
         }
     }
 }

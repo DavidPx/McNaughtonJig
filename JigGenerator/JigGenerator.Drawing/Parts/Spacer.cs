@@ -1,8 +1,6 @@
-﻿using System;
-using Svg;
+﻿using Svg;
 using JigGenerator.Drawing.Primitives;
 using Svg.Transforms;
-using Svg.Pathing;
 using System.Collections.Generic;
 
 namespace JigGenerator.Drawing.Parts

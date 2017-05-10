@@ -3,12 +3,7 @@ using Svg;
 using Svg.Pathing;
 using Svg.Transforms;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JigGenerator.Drawing.Parts
 {
@@ -65,6 +60,51 @@ namespace JigGenerator.Drawing.Parts
             Children.Add(CreateAngleMarks());
             Children.Add(CreateSlotPath());
             Children.Add(CreateAngleText());
+            Children.Add(CreateOutline());
+        }
+
+        private SvgVisualElement CreateOutline()
+        {
+            const float cornerRadius = 3f;
+
+            var path = Paths.CutPath();
+
+            var bottomY = armThickness / 2;
+            var rightBorderX = bodyRadius;
+
+            // start drawing the path @ E.  E, F, G, A, B, C, D
+            var pointE = Points.MetricPoint(rightBorderX, 0);
+            var pointF = Points.MetricPoint(rightBorderX, bottomY - cornerRadius);
+            var pointG = Points.MetricPoint(rightBorderX - cornerRadius, bottomY);
+
+            path.PathData.Add(new SvgMoveToSegment(pointE));
+            path.PathData.Add(new SvgLineSegment(pointE, pointF));
+            path.PathData.Add(Arcs.SimpleSegment(pointF, cornerRadius, SvgArcSweep.Positive, pointG));
+
+            if (armLength > 0)
+            {
+                float leftArmX = -bodyRadius - armLength + cornerRadius;
+                var pointA = Points.MetricPoint(leftArmX, bottomY);
+                var pointB = Points.MetricPoint(leftArmX, bottomY - armThickness);
+                
+                var dY = bottomY - armThickness - cornerRadius;
+                var dX = -(float)Math.Sqrt(Math.Pow(bodyRadius, 2) - Math.Pow(dY, 2));
+                var pointC = Points.MetricPoint(dX - cornerRadius, dY + cornerRadius);
+                var pointD = Points.MetricPoint(dX, dY);
+
+                path.PathData.Add(new SvgLineSegment(pointG, pointA));
+                path.PathData.Add(Arcs.SimpleSegment(pointA, armThickness / 2, SvgArcSweep.Positive, pointB));
+                path.PathData.Add(new SvgLineSegment(pointB, pointC));
+                path.PathData.Add(Arcs.SimpleSegment(pointC, cornerRadius, SvgArcSweep.Negative, pointD));
+                path.PathData.Add(Arcs.SimpleSegment(pointD, bodyRadius, SvgArcSweep.Positive, pointE));
+            }
+            // todo: else for zero arm
+
+            
+
+            
+
+            return path;
         }
 
         private SvgGroup CreateAngleText()
@@ -90,7 +130,7 @@ namespace JigGenerator.Drawing.Parts
                 float y = -textBaselineRadius * DegreeTrig.Sin(a);
                 label.Transforms.Add(new SvgTranslate(x.Px(), y.Px()));
                 label.Transforms.Add(new SvgRotate(textRotation));
-
+                
                 group.Children.Add(label);
             }
 
@@ -139,17 +179,12 @@ namespace JigGenerator.Drawing.Parts
             float outerArcX = outerArcRadius * DegreeTrig.Cos(startAngle);
             float outerArcY = -outerArcRadius * DegreeTrig.Sin(startAngle);
 
-            var pointA = new PointF(-outerArcX.Px(), outerArcY.Px());
-            var pointB = new PointF(outerArcX.Px(), outerArcY.Px());
-            var pointC = new PointF(innerArcX.Px(), innerArcY.Px());
-            var pointD = new PointF(-innerArcX.Px(), innerArcY.Px());
+            var pointA = Points.MetricPoint(-outerArcX, outerArcY);
+            var pointB = Points.MetricPoint(outerArcX, outerArcY);
+            var pointC = Points.MetricPoint(innerArcX, innerArcY);
+            var pointD = Points.MetricPoint(-innerArcX, innerArcY);
 
-            var slotPath = new SvgPath
-            {
-                Fill = SvgPaintServer.None,
-                Stroke = Colors.Cut(),
-                StrokeWidth = Units.Mm(Constants.Kerf)
-            };
+            var slotPath = Paths.CutPath();
 
             var leftEndCap = MakeEndCap(-innerArcX, innerArcY, -outerArcX, outerArcY);
             var rightEndCap = MakeEndCap(outerArcX, outerArcY, innerArcX, innerArcY);
@@ -165,26 +200,26 @@ namespace JigGenerator.Drawing.Parts
         private SvgArcSegment MakeEndCap(float startX, float startY, float endX, float endY)
         {
             return new SvgArcSegment(
-                            new System.Drawing.PointF(startX.Px(), startY.Px()),
+                            new PointF(startX.Px(), startY.Px()),
                             fastenerDiameter / 2f,
                             fastenerDiameter / 2f,
                             0f,// 180 * (float)radiansPerDegree,
                             SvgArcSize.Small,
                             SvgArcSweep.Positive,
-                            new System.Drawing.PointF(endX.Px(), endY.Px())
+                            new PointF(endX.Px(), endY.Px())
                             );
         }
 
         private static SvgArcSegment MakeSlotArc(float radius, float x, float y)
         {
             var arc = new SvgArcSegment(
-                new System.Drawing.PointF(-x, y),
+                new PointF(-x, y),
                 radius.Px(),
                 radius.Px(),
-                0f,// 120f,
+                0f,
                 SvgArcSize.Small,
                 SvgArcSweep.Positive,
-                new System.Drawing.PointF(x, y));
+                new PointF(x, y));
             
             return arc;
         }

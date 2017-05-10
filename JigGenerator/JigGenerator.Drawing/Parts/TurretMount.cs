@@ -1,7 +1,5 @@
 ﻿using JigGenerator.Drawing.Primitives;
-using Svg;
 using Svg.Transforms;
-using System;
 
 namespace JigGenerator.Drawing.Parts
 {

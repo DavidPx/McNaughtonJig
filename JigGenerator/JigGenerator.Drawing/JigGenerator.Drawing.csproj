@@ -54,6 +54,8 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Primitives\Element.cs" />
     <Compile Include="Primitives\Lines.cs" />
+    <Compile Include="Primitives\Paths.cs" />
+    <Compile Include="Primitives\Points.cs" />
     <Compile Include="Primitives\Text.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Primitives\Units.cs" />
