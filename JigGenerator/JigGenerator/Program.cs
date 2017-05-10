@@ -37,7 +37,12 @@ namespace JigGenerator
 
             var protractor = new Protractor(boltDiameter, 120, 12, 10);
             protractor.Create();
+            protractor.Transforms.Add(new SvgTranslate(p1Size, 0));
             doc.Children.Add(protractor);
+
+            var pointer = new Pointer(boltDiameter);
+            pointer.Create();
+            doc.Children.Add(pointer);
             
             File.WriteAllText(@"c:\temp\Drawing.svg", doc.GetXML());
         }

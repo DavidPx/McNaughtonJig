@@ -13,5 +13,15 @@ namespace JigGenerator.Drawing
         {
             return (float)Math.Cos(angle * (float)Math.PI / 180f);
         }
+
+        internal static float Degrees(float radians)
+        {
+            return radians * 180f / (float)Math.PI;
+        }
+
+        internal static float Degrees(double angleR)
+        {
+            return (float)(angleR * 180 / Math.PI);
+        }
     }
 }
