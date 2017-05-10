@@ -1,8 +1,10 @@
 ﻿using JigGenerator.Drawing.Primitives;
 using Svg;
 using Svg.Pathing;
+using Svg.Transforms;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -15,11 +17,12 @@ namespace JigGenerator.Drawing.Parts
         private float armLength;
         private const float baseWidth = 109f * 2;
         private const float armThickness = 25.4f;
-        private const float bodyRadius = 110f;
+        private  float bodyRadius;
         private const int totalProtractorAngleSweep = 120;
         private const int startAngle = 90 - totalProtractorAngleSweep / 2;
         private const float majorDivisionLength = 7f;
         private const float minorDivisionLength = 4f;
+        private const float textHeight = 4f;
 
         private float fastenerDiameter;
         private ushort majorDivisions;
@@ -37,6 +40,12 @@ namespace JigGenerator.Drawing.Parts
             this.minorDivisions = minorDivisions;
 
             outerArcRadius = Constants.JigHoleSpacing + (fastenerDiameter / 2f - Constants.Kerf);
+
+            // put the text a comfortable distance away from the slot
+            textBaselineRadius = outerArcRadius + 2f;
+
+            // put the major lines a comfortable distance away from the top of the text
+            bodyRadius = textBaselineRadius + textHeight + 1f + majorDivisionLength;
         }
         public Protractor(float fastenerDiameter, float armLength, ushort majorDivisions, ushort minorDivisions)
             : this(fastenerDiameter, majorDivisions, minorDivisions)
@@ -51,53 +60,69 @@ namespace JigGenerator.Drawing.Parts
 
         public void Create()
         {
-            // Baseline is the bottom hole
-            var hole = Circles.CutCircle(fastenerDiameter, 0, 0);
-            var slotPath = CreateSlotPath();
-
+            // Baseline is the bottom hole because most shapes are arcs with it as their center
+            Children.Add(Circles.CutCircle(fastenerDiameter, 0, 0));
             Children.Add(CreateAngleMarks());
-            Children.Add(hole);
-            Children.Add(slotPath);
+            Children.Add(CreateSlotPath());
+            Children.Add(CreateAngleText());
+        }
+
+        private SvgGroup CreateAngleText()
+        {
+            var group = new SvgGroup();
+
+            var majorAngleIncrement = (float)totalProtractorAngleSweep / majorDivisions;
+            
+            for (int i = 0; i <= majorDivisions; i++)
+            {
+                // The angle from the horizontal, used for positioning each label
+                var a = startAngle + i * majorAngleIncrement;
+
+                // this is the angle from the vertical.  The graduation mark function uses the angle from the horizontal. 
+                // the letters start rotated left -60
+                var textRotation = -90 + a;
+
+                // go from -n to n
+                var number = -totalProtractorAngleSweep / 2 + i * majorAngleIncrement;
+
+                var label = Text.EtchedText(number.ToString("#0"), textHeight);
+                float x = -textBaselineRadius * DegreeTrig.Cos(a);
+                float y = -textBaselineRadius * DegreeTrig.Sin(a);
+                label.Transforms.Add(new SvgTranslate(x.Px(), y.Px()));
+                label.Transforms.Add(new SvgRotate(textRotation));
+
+                group.Children.Add(label);
+            }
+
+            return group;
         }
 
         private SvgGroup CreateAngleMarks()
         {
             var group = new SvgGroup();
-            var majorIncrement = (float)totalProtractorAngleSweep / majorDivisions;
             var minorIncrement = (float)totalProtractorAngleSweep / (minorDivisions * majorDivisions);
-
-            // Major divisions
-            for (float a = startAngle; a <= totalProtractorAngleSweep + startAngle; a += majorIncrement)
+            var doMidPoint = minorDivisions % 2 == 0;
+            
+            // Spin through the minor divisions selecting the length of the line as we go
+            for (int i = 0; i <= majorDivisions * minorDivisions; ++i)
             {
-                var l = Lines.EtchLine(
-                    bodyRadius * DegreeTrig.Cos(a),
-                    -bodyRadius * DegreeTrig.Sin(a),
-                    (bodyRadius - majorDivisionLength) * DegreeTrig.Cos(a),
-                    -(bodyRadius - majorDivisionLength) * DegreeTrig.Sin(a));
-                group.Children.Add(l);
-            }
-
-            // Minor divisions
-            for (int i = 0; i < majorDivisions * minorDivisions; ++i)
-            {
-                
-                // float a = startAngle; a <= totalProtractorAngleSweep + startAngle; a += minorIncrement
-                // skip majors
-                if (i % minorDivisions == 0)
-                    continue;
-
                 var a = startAngle + i * minorIncrement;
+                float lineLength;
 
-                var midpointExtra = 0f;
-
-                if (minorDivisions % 2 == 0 && i % (minorDivisions / 2) == 0)
-                    midpointExtra = 1.5f;
-
+                if (i % minorDivisions == 0) // 0, 10, 20 should draw major lines
+                    lineLength = majorDivisionLength; // major 
+                else if (doMidPoint && i % (minorDivisions / 2) == 0)
+                    lineLength = minorDivisionLength + 1.5f; // midpoint 
+                else
+                    lineLength = minorDivisionLength;
+                
                 var l = Lines.EtchLine(
-                    bodyRadius * DegreeTrig.Cos(a),
+                    // all lines start on the edge and continue along their length
+                    -bodyRadius * DegreeTrig.Cos(a),
                     -bodyRadius * DegreeTrig.Sin(a),
-                    (bodyRadius - minorDivisionLength - midpointExtra) * DegreeTrig.Cos(a),
-                    -(bodyRadius - minorDivisionLength - midpointExtra) * DegreeTrig.Sin(a));
+                    -(bodyRadius - lineLength) * DegreeTrig.Cos(a),
+                    -(bodyRadius - lineLength) * DegreeTrig.Sin(a));
+
                 group.Children.Add(l);
             }
 

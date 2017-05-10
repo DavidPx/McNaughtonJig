@@ -53,7 +53,7 @@ namespace JigGenerator.Drawing.Parts
             Children.Add(rightHole);
 
             // Add a label;
-            var label = Text.EtchedText(Label);
+            var label = Text.EtchedText(Label, 10f);
             label.Transforms.Add(new SvgTranslate(0, 45f.Px()));
 
             Children.Add(label);

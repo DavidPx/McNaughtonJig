@@ -9,11 +9,11 @@ namespace JigGenerator.Drawing.Primitives
 {
     internal static class Text
     {
-        internal static SvgText EtchedText(string text)
+        internal static SvgText EtchedText(string text, float fontSize)
         {
             var label = new SvgText(text)
             {
-                FontSize = Units.Mm(10f),
+                FontSize = Units.Mm(fontSize),
                 TextAnchor = SvgTextAnchor.Middle
             };
             label.Fill = SvgPaintServer.None;
