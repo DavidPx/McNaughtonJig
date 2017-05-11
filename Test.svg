@@ -1,7 +1,0 @@
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg x="0" y="0" width="200mm" height="200mm" overflow="inherit" preserveAspectRatio="xMidYMid" font-size="0" xml:space="default" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
-  <circle cx="50mm" cy="50mm" r="12.495mm" stroke="#0000FF" stroke-width="0.01mm" xml:space="default" style="fill:none;" />
-  <circle cx="150mm" cy="50mm" r="12.495mm" stroke="#0000FF" stroke-width="0.01mm" xml:space="default" style="fill:none;" />
-  <circle cx="150mm" cy="150mm" r="12.495mm" stroke="#0000FF" stroke-width="0.01mm" xml:space="default" style="fill:none;" />
-  <circle cx="50mm" cy="150mm" r="12.495mm" stroke="#0000FF" stroke-width="0.01mm" xml:space="default" style="fill:none;" />
-</svg>
