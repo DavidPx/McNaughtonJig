@@ -1,5 +1,6 @@
 ﻿using JigGenerator.Drawing.Primitives;
 using Svg;
+using Svg.Pathing;
 using Svg.Transforms;
 using System;
 using System.Diagnostics;
@@ -11,6 +12,7 @@ namespace JigGenerator.Drawing.Parts
     {
         private const float widthAboveRadiusHoles = 20f;
         private const float guideLineLength = 10f;
+        private const float rightSideWidth = 15f;
         float[] radii;
 
         /// <summary>
@@ -20,7 +22,7 @@ namespace JigGenerator.Drawing.Parts
         public Pointer(float fastenerDiameter) 
             : base(fastenerDiameter)
         {
-            radii = new float[] { 89, 137, 176, 275 };
+            radii = new float[] { 89, 137, 176, 275 }; // Gavin's defaults
         }
 
         /// <summary>
@@ -33,20 +35,54 @@ namespace JigGenerator.Drawing.Parts
         {
             if (radii.Length < 1)
                 throw new ArgumentException(nameof(radii), "Enter more than one cutter radius");
+
+            this.radii = radii;
         }
                 
         public override void Create()
         {
             const float jigTopRadius = Constants.JigHoleSpacing + widthAboveRadiusHoles;
+            const float cornerRadius = 3f;
 
-            CreateRadiusHoles();
+            CreateRadiusHoles(out float pivotY); // pivotY is ~26mm
 
-            Children.Add(Lines.EtchLine(0, widthAboveRadiusHoles, 0, widthAboveRadiusHoles - guideLineLength));
+            Children.Add(Lines.EtchLine(0, -widthAboveRadiusHoles, 0, -(widthAboveRadiusHoles - guideLineLength)));
 
-            // TODO: add etched line for seeing the angle, outline
+            var path = Paths.CutPath();
+
+            var pointA = Points.MetricPoint(0, Constants.JigHoleSpacing + pivotY);
+            float pointerCornersY = Constants.JigHoleSpacing + pivotY - rightSideWidth;
+            var pointB = Points.MetricPoint(rightSideWidth, pointerCornersY);
+
+            const float jigSweep = 45f; // degrees of sweep the jig body will have
+            var angleBeta = Math.PI / 180f * (90 - jigSweep / 2);
+            var angleP = Math.Acos(rightSideWidth / jigTopRadius) - angleBeta;
+            var n = jigTopRadius * DegreeTrig.Sin(jigSweep / 2);
+
+            var d = 2 * n * Math.Sin(angleP);
+            var c = 2 * n * Math.Cos(angleP);
+
+            var cY =  Constants.JigHoleSpacing - Math.Sqrt(Math.Pow(jigTopRadius, 2) - Math.Pow(rightSideWidth, 2));
+            var pointC = Points.MetricPoint(rightSideWidth, (float)cY);
+
+            var dX = -(c - rightSideWidth);
+            var dY = cY + d;
+
+            var pointD = Points.MetricPoint((float)dX, (float)dY);
+
+            var pointE = Points.MetricPoint(-rightSideWidth, pointerCornersY);
+
+            path.PathData.Add(new SvgMoveToSegment(pointA));
+            path.PathData.Add(new SvgLineSegment(pointA, pointB));
+            path.PathData.Add(new SvgLineSegment(pointB, pointC));
+            path.PathData.Add(Arcs.SimpleSegment(pointC, jigTopRadius, SvgArcSweep.Negative, pointD));
+            path.PathData.Add(new SvgLineSegment(pointD, pointE));
+            path.PathData.Add(new SvgLineSegment(pointE, pointA));
+
+            Children.Add(path);
         }
 
-        private void CreateRadiusHoles()
+        private void CreateRadiusHoles(out float pivotY)
         {
             // top hole is the origin point
             // pivot point Y is the bottom  hole
@@ -60,7 +96,7 @@ namespace JigGenerator.Drawing.Parts
             var angleBeta = Math.PI / 2 - angleAlpha;
             var h = smallestRadius / Math.Cos(angleAlpha);
             var x = h - smallestRadius;
-            var pivotY = x * Math.Tan(angleBeta);
+            pivotY = (float)(x * Math.Tan(angleBeta));
 
             var bottomHole = topHole.CreateReference(0, Constants.JigHoleSpacing);
 

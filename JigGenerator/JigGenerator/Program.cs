@@ -35,12 +35,12 @@ namespace JigGenerator
             bigTurret.Transforms.Add(new SvgTranslate(p1Size * 2 / 3, p1Size * 2 / 3));
             doc.Children.Add(bigTurret);
 
-            var protractor = new Protractor(boltDiameter, 120, 12, 10);
+            var protractor = new Protractor(boltDiameter, 20, 12, 10);
             protractor.Create();
             protractor.Transforms.Add(new SvgTranslate(p1Size, 0));
             doc.Children.Add(protractor);
 
-            var pointer = new Pointer(boltDiameter);
+            var pointer = new Pointer(boltDiameter, new float[] { 83, 112, 226, 170, 237 });
             pointer.Create();
             doc.Children.Add(pointer);
             
