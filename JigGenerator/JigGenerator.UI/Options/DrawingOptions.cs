@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace JigGenerator.UI.Options
 {
     [Serializable]
-    internal class DrawingOptions
+    public class DrawingOptions
     {
         public float Width { get; set; }
         public float Height { get; set; }

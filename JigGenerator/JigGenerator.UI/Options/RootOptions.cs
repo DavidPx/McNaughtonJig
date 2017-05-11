@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace JigGenerator.UI.Options
 {
     [Serializable]
-    internal class RootOptions
+    public class RootOptions
     {
         public float FastenerDiameter { get; set; }
 

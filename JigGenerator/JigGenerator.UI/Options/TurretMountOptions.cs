@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace JigGenerator.UI.Options
 {
     [Serializable]
-    internal class TurretMountOptions
+    public class TurretMountOptions
     {
         public bool MakeJumoAndStandard { get; set; }
         public bool MakeMini { get; set; }

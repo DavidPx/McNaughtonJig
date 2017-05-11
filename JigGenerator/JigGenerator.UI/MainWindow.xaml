@@ -5,10 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:JigGenerator.UI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="473.667" Width="550.167">
+        Title="McNaughton Center Saver Jig Generator" Height="473.667" Width="550.167">
     <Grid>
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="78" Margin="10,355,0,0" VerticalAlignment="Top" Width="522">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="411*"/>
+            <ColumnDefinition Width="131*"/>
+        </Grid.ColumnDefinitions>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="78" Margin="10,355,0,0" VerticalAlignment="Top" Width="522" Grid.ColumnSpan="2">
             <Button Content="Go!" Click="GenerateDrawing" Width="60" Margin="232,0,228,9" Height="20" VerticalAlignment="Bottom" />
         </Border>
+        <DockPanel HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_Prefernces">
+                    <MenuItem Header="Save Current Options" Click="SaveOptions_Click" />
+                    <MenuItem Header="Save Current Options To..." Click="SaveOptionsTo_Click"/>
+                    <MenuItem Header="Load Options" Click="LoadOptions_Click"/>
+                </MenuItem>
+            </Menu>
+        </DockPanel>
     </Grid>
 </Window>

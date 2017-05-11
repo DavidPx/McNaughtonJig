@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace JigGenerator.UI.Options
 {
     [Serializable]
-    internal class PointerOptions
+    public class PointerOptions
     {
         public float[] CutterRadii { get; set; }
 

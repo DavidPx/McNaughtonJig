@@ -31,7 +31,7 @@ namespace JigGenerator.UI
         private void GenerateDrawing(object sender, RoutedEventArgs e)
         {
             // Load the options
-            var options = new RootOptions();
+            var options = GatherOptions();
 
             // Pass them to the drawing class which returns the SvgDocument
             var manager = new DrawingManager();
@@ -39,6 +39,40 @@ namespace JigGenerator.UI
 
             // Save it to a file
             File.WriteAllText(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Jig.svg"), doc.GetXML());
+        }
+
+        private void SaveOptions_Click(object sender, RoutedEventArgs e)
+        {
+            var dest = new DirectoryInfo(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "JigGenerator"));
+
+            if (!dest.Exists)
+                dest.Create();
+
+            // Load all the controls into the options object
+            var options = GatherOptions();
+
+            var serializer = new System.Xml.Serialization.XmlSerializer(typeof(RootOptions));
+
+            using (var writer = new StreamWriter(System.IO.Path.Combine(dest.FullName, "options.xml"), false))
+            {
+                serializer.Serialize(writer, options);
+            }
+            
+        }
+
+        private void SaveOptionsTo_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void LoadOptions_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private RootOptions GatherOptions()
+        {
+            return new RootOptions();
         }
     }
 }

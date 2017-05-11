@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace JigGenerator.UI.Options
 {
     [Serializable]
-    internal class ProtractorOptions
+    public class ProtractorOptions
     {
         public float ArmLength { get; set; }
         public ushort MajorDivisions { get; set; }
