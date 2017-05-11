@@ -40,7 +40,7 @@ namespace JigGenerator
             protractor.Transforms.Add(new SvgTranslate(p1Size, 0));
             doc.Children.Add(protractor);
 
-            var pointer = new Pointer(boltDiameter, new float[] { 83, 112, 226, 170, 237 });
+            var pointer = new Pointer(boltDiameter, new float[] { 83, 112, 231, 170 });
             pointer.Create();
             doc.Children.Add(pointer);
             
