@@ -34,4 +34,4 @@ Here's how to convert text to paths in Inkscape.  There are two sets of text ele
 
 Now notice that each letter is its own path:
 
-![object to paths 2(/Help/ObjectToPaths2.png?raw=true)
+![object to paths 2](/Help/ObjectToPaths2.png?raw=true)
