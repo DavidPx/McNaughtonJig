@@ -2,17 +2,12 @@
 using JigGenerator.UI.Options;
 using Svg;
 using Svg.Transforms;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JigGenerator.UI
 {
     internal class DrawingManager
     {
-        internal SvgDocument CreateDocument(RootOptions options)
+        internal SvgDocument CreateDocument(JigOptions options)
         {
             var width = new SvgUnit(SvgUnitType.Millimeter, options.Drawing.Width);
             var height = new SvgUnit(SvgUnitType.Millimeter, options.Drawing.Height);

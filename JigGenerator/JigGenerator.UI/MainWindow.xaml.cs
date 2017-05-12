@@ -1,20 +1,8 @@
 ﻿using JigGenerator.UI.Options;
 using Svg;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace JigGenerator.UI
 {
@@ -23,9 +11,20 @@ namespace JigGenerator.UI
     /// </summary>
     public partial class MainWindow : Window
     {
+        private FileInfo destination;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            var defaultDrawingPath = Properties.Settings.Default["DefaultDrawingPath"] as string;
+
+            if (string.IsNullOrWhiteSpace(defaultDrawingPath))
+            {
+                defaultDrawingPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Jig.svg");
+            }
+
+            destination = new FileInfo(defaultDrawingPath);
         }
 
         private void GenerateDrawing(object sender, RoutedEventArgs e)
@@ -36,33 +35,44 @@ namespace JigGenerator.UI
             // Pass them to the drawing class which returns the SvgDocument
             var manager = new DrawingManager();
             var doc = manager.CreateDocument(options);
-
+            
             // Save it to a file
             File.WriteAllText(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Jig.svg"), doc.GetXML());
         }
 
         private void SaveOptions_Click(object sender, RoutedEventArgs e)
         {
-            var dest = new DirectoryInfo(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "JigGenerator"));
-
-            if (!dest.Exists)
-                dest.Create();
-
-            // Load all the controls into the options object
             var options = GatherOptions();
 
-            var serializer = new System.Xml.Serialization.XmlSerializer(typeof(RootOptions));
-
-            using (var writer = new StreamWriter(System.IO.Path.Combine(dest.FullName, "options.xml"), false))
-            {
-                serializer.Serialize(writer, options);
-            }
-            
+            var optionsManager = new OptionsManager();
+            optionsManager.SaveOptions(options);
         }
 
         private void SaveOptionsTo_Click(object sender, RoutedEventArgs e)
         {
+            var defaultOptionsDirectory = Properties.Settings.Default["DefaultOptionsDirectory"] as string;
 
+            if (string.IsNullOrWhiteSpace(defaultOptionsDirectory))
+                defaultOptionsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            var filePrompt = new Microsoft.Win32.SaveFileDialog
+            {
+                DefaultExt = "xml",
+                InitialDirectory = defaultOptionsDirectory,
+                AddExtension = true
+            };
+
+            if (filePrompt.ShowDialog().GetValueOrDefault(true))
+            {
+                var options = GatherOptions();
+                var optionsManager = new OptionsManager();
+                var selectedFile = new FileInfo(filePrompt.FileName);
+                optionsManager.SaveOptions(options, selectedFile);
+
+                Properties.Settings.Default["DefaultOptionsDirectory"] = selectedFile.DirectoryName;
+                Properties.Settings.Default.Save();
+            }
+            
         }
 
         private void LoadOptions_Click(object sender, RoutedEventArgs e)
@@ -70,9 +80,14 @@ namespace JigGenerator.UI
 
         }
 
-        private RootOptions GatherOptions()
+        private JigOptions GatherOptions()
         {
-            return new RootOptions();
+            return new JigOptions();
+        }
+
+        private void LoadOptionsFrom_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

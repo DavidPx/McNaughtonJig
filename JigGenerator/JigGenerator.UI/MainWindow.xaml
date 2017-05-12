@@ -20,6 +20,7 @@
                     <MenuItem Header="Save Current Options" Click="SaveOptions_Click" />
                     <MenuItem Header="Save Current Options To..." Click="SaveOptionsTo_Click"/>
                     <MenuItem Header="Load Options" Click="LoadOptions_Click"/>
+                    <MenuItem Header="Load Options From..." Click="LoadOptionsFrom_Click" />
                 </MenuItem>
             </Menu>
         </DockPanel>

@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JigGenerator.UI.Options
 {
+    /// <summary>
+    /// All the parmaeters that go into a jig.  Not used for other settings that are specific to the program.
+    /// </summary>
     [Serializable]
-    public class RootOptions
+    public class JigOptions
     {
         public float FastenerDiameter { get; set; }
 
@@ -18,8 +17,8 @@ namespace JigGenerator.UI.Options
         public DrawingOptions Drawing { get; set; }
 
         public TurretMountOptions TurretMount { get; set; }
-
-        public RootOptions()
+        
+        public JigOptions()
         {
             FastenerDiameter = 6f;
             Protractor = new ProtractorOptions();

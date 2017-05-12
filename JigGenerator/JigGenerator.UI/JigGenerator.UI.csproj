@@ -72,10 +72,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OptionsManager.cs" />
     <Compile Include="Options\DrawingOptions.cs" />
     <Compile Include="Options\PointerOptions.cs" />
     <Compile Include="Options\ProtractorOptions.cs" />
-    <Compile Include="Options\RootOptions.cs" />
+    <Compile Include="Options\JigOptions.cs" />
     <Compile Include="Options\TurretMountOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
