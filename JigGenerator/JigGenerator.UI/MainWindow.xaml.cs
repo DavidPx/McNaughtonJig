@@ -3,6 +3,7 @@ using Svg;
 using System;
 using System.IO;
 using System.Windows;
+using System.Windows.Media;
 
 namespace JigGenerator.UI
 {
@@ -29,15 +30,7 @@ namespace JigGenerator.UI
 
         private void GenerateDrawing(object sender, RoutedEventArgs e)
         {
-            // Load the options
-            var options = GatherOptions();
-
-            // Pass them to the drawing class which returns the SvgDocument
-            var manager = new DrawingManager();
-            var doc = manager.CreateDocument(options);
-            
-            // Save it to a file
-            File.WriteAllText(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Jig.svg"), doc.GetXML());
+           
         }
 
         private void SaveOptions_Click(object sender, RoutedEventArgs e)
@@ -50,19 +43,15 @@ namespace JigGenerator.UI
 
         private void SaveOptionsTo_Click(object sender, RoutedEventArgs e)
         {
-            var defaultOptionsDirectory = Properties.Settings.Default["DefaultOptionsDirectory"] as string;
-
-            if (string.IsNullOrWhiteSpace(defaultOptionsDirectory))
-                defaultOptionsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
             var filePrompt = new Microsoft.Win32.SaveFileDialog
             {
                 DefaultExt = "xml",
-                InitialDirectory = defaultOptionsDirectory,
+                InitialDirectory = GetDefaultOptionsDirectory(),
                 AddExtension = true
             };
 
-            if (filePrompt.ShowDialog().GetValueOrDefault(true))
+            if (filePrompt.ShowDialog().GetValueOrDefault(false))
             {
                 var options = GatherOptions();
                 var optionsManager = new OptionsManager();
@@ -72,12 +61,35 @@ namespace JigGenerator.UI
                 Properties.Settings.Default["DefaultOptionsDirectory"] = selectedFile.DirectoryName;
                 Properties.Settings.Default.Save();
             }
-            
+
+        }
+
+        private static string GetDefaultOptionsDirectory()
+        {
+            var defaultOptionsDirectory = Properties.Settings.Default["DefaultOptionsDirectory"] as string;
+
+            if (string.IsNullOrWhiteSpace(defaultOptionsDirectory))
+                defaultOptionsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            return defaultOptionsDirectory;
+        }
+
+        private static string GetDefaultDrawingDirectory()
+        {
+            var defaultDrawingDirectory = Properties.Settings.Default["DefaultDrawingPath"] as string;
+
+            if (string.IsNullOrWhiteSpace(defaultDrawingDirectory))
+                defaultDrawingDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            return defaultDrawingDirectory;
         }
 
         private void LoadOptions_Click(object sender, RoutedEventArgs e)
         {
+            var optionsManager = new OptionsManager();
+            var options = optionsManager.LoadOptions();
 
+            if (options == null) return;
+
+            // TODO set all the fields using the options object
         }
 
         private JigOptions GatherOptions()
@@ -85,8 +97,101 @@ namespace JigGenerator.UI
             return new JigOptions();
         }
 
+        private void UseOptions(JigOptions options)
+        {
+
+        }
+
         private void LoadOptionsFrom_Click(object sender, RoutedEventArgs e)
         {
+            var filePrompt = new Microsoft.Win32.OpenFileDialog
+            {
+                DefaultExt = "xml",
+                CheckFileExists = true,
+                InitialDirectory = GetDefaultOptionsDirectory(),
+                Multiselect = false
+            };
+
+            if (filePrompt.ShowDialog().GetValueOrDefault(false))
+            {
+                var selectedFile = new FileInfo(filePrompt.FileName);
+
+                var optionsManager = new OptionsManager();
+                var options = optionsManager.LoadOptions(selectedFile);
+
+                UseOptions(options);
+            }
+        }
+
+        private void templateSelectButton_Click(object sender, RoutedEventArgs e)
+        {
+            var filePrompt = new Microsoft.Win32.OpenFileDialog
+            {
+                DefaultExt = "svg",
+                CheckFileExists = true,
+                InitialDirectory = GetDefaultOptionsDirectory(),
+                Multiselect = false
+            };
+
+            if (filePrompt.ShowDialog().GetValueOrDefault(false))
+            {
+                templateFilePath.Text = filePrompt.FileName;
+            }
+        }
+
+        private void emptyFileSelectButton_Click(object sender, RoutedEventArgs e)
+        {
+            var filePrompt = new Microsoft.Win32.SaveFileDialog
+            {
+                DefaultExt = "svg",
+                InitialDirectory = GetDefaultDrawingDirectory(),
+                AddExtension = true
+            };
+
+            if (filePrompt.ShowDialog().GetValueOrDefault(false))
+            {
+                emptyFilePath.Text = filePrompt.FileName;
+            }
+        }
+        
+        private void emptyFileGenerate_Click(object sender, RoutedEventArgs e)
+        {
+            // Prompt the user for the file if needed
+            if (string.IsNullOrWhiteSpace(emptyFilePath.Text))
+            {
+                emptyFileSelectButton_Click(sender, e);
+
+                // still not set? cancel
+                if (string.IsNullOrWhiteSpace(emptyFilePath.Text)) return;
+            }
+            // Load the options
+            var options = GatherOptions();
+
+            // Pass them to the drawing class which returns the SvgDocument
+            var manager = new DrawingManager();
+            var doc = manager.CreateDocument(options);
+
+            // Save it to a file
+            File.WriteAllText(emptyFilePath.Text, doc.GetXML());
+        }
+
+        private void saveToTemplateButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Prompt and cancel if not set
+            if (string.IsNullOrWhiteSpace(templateFilePath.Text))
+            {
+                templateSelectButton_Click(sender, e);
+
+                if (string.IsNullOrWhiteSpace(templateFilePath.Text)) return;
+            }
+
+            if (string.IsNullOrWhiteSpace(templateLayerId.Text))
+            {
+                templateLayerId.BorderBrush = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+                return;
+            }
+
+            templateLayerId.BorderBrush = null;
 
         }
     }

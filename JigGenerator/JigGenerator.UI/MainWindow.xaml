@@ -1,19 +1,18 @@
-﻿<Window x:Class="JigGenerator.UI.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:JigGenerator.UI"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="JigGenerator.UI.MainWindow"
         mc:Ignorable="d"
         Title="McNaughton Center Saver Jig Generator" Height="473.667" Width="550.167">
+    <Window.Resources>
+        <Thickness x:Key="LabelPadding">1</Thickness>
+        <System:Double x:Key="LabelFontSize">10</System:Double>
+    </Window.Resources>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="411*"/>
-            <ColumnDefinition Width="131*"/>
-        </Grid.ColumnDefinitions>
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="78" Margin="10,355,0,0" VerticalAlignment="Top" Width="522" Grid.ColumnSpan="2">
-            <Button Content="Go!" Click="GenerateDrawing" Width="60" Margin="232,0,228,9" Height="20" VerticalAlignment="Bottom" />
-        </Border>
+
         <DockPanel HorizontalAlignment="Left" VerticalAlignment="Top">
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_Prefernces">
@@ -24,5 +23,35 @@
                 </MenuItem>
             </Menu>
         </DockPanel>
+        <GroupBox x:Name="SaveArea" Header="Save your Drawing" VerticalAlignment="Bottom" Margin="10,0,10,10">
+            <StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0">
+                    <StackPanel Orientation="Vertical">
+                        <Label Content="Path" FontSize="{DynamicResource LabelFontSize}" Padding="{DynamicResource LabelPadding}" />
+                        <TextBox Width="200" x:Name="templateFilePath" />
+                    </StackPanel>
+                    <Button Content="Select..." x:Name="templateSelectButton" Margin="10, 0, 0, 0"  VerticalAlignment="Bottom" Click="templateSelectButton_Click"/>
+                    <StackPanel Orientation="Vertical" Margin="10,0,0,0">
+                        <Label Content="Layer Id" FontSize="{DynamicResource LabelFontSize}" Padding="{DynamicResource LabelPadding}" />
+                        <TextBox Width="60" x:Name="templateLayerId" />
+                    </StackPanel>
+                    <Button Content="Save to Template" Name="saveToTemplateButton" Margin="10, 0, 0, 0" VerticalAlignment="Bottom"  Click="saveToTemplateButton_Click"/>
+                </StackPanel>
+
+                <Separator Margin="0,10,0,2" />
+
+                <StackPanel Orientation="Horizontal" Margin="0">
+                    <StackPanel Orientation="Vertical">
+                        <Label Content="Path" Padding="{DynamicResource LabelPadding}" FontSize="{DynamicResource LabelFontSize}" />
+                        <TextBox Width="200" x:Name="emptyFilePath" />
+                    </StackPanel>
+
+                    <Button Content="Select..." x:Name="emptyFileSelectButton" Margin="10, 0, 0, 0" VerticalAlignment="Bottom" Click="emptyFileSelectButton_Click" />
+                    <Button Content="Save to Empty File" Name="emptyFileGenerate" Click="emptyFileGenerate_Click" Margin="10,0,0,0" VerticalAlignment="Bottom" />
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+
     </Grid>
 </Window>

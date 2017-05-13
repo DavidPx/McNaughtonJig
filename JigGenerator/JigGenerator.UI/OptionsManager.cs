@@ -34,6 +34,9 @@ namespace JigGenerator.UI
 
         internal JigOptions LoadOptions()
         {
+            if (!defaultFile.Exists)
+                return null;
+
             return LoadOptions(defaultFile);
         }
 
