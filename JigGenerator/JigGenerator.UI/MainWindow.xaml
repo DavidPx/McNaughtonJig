@@ -23,7 +23,7 @@
                 </MenuItem>
             </Menu>
         </DockPanel>
-        <GroupBox x:Name="SaveArea" Header="Save your Drawing" VerticalAlignment="Bottom" Margin="10,0,10,10">
+        <GroupBox x:Name="SaveArea" Header="Save your Drawing" VerticalAlignment="Bottom" Margin="10,0,10,35">
             <StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0">
@@ -52,6 +52,11 @@
                 </StackPanel>
             </StackPanel>
         </GroupBox>
+        <StatusBar Name="statusBar" Height="20" Margin="10,0,10,10" VerticalAlignment="Bottom">
+            <StatusBarItem>
+                <TextBlock Name="statusText" />
+            </StatusBarItem>
+        </StatusBar>
 
     </Grid>
 </Window>

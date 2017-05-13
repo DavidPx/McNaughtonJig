@@ -27,10 +27,16 @@ namespace JigGenerator.UI
 
             destination = new FileInfo(defaultDrawingPath);
         }
-
-        private void GenerateDrawing(object sender, RoutedEventArgs e)
+        
+        private SvgDocument GenerateDocument()
         {
-           
+            // Load the options
+            var options = GatherOptions();
+
+            // Pass them to the drawing class which returns the SvgDocument
+            var manager = new DrawingManager();
+
+            return manager.CreateDocument(options);
         }
 
         private void SaveOptions_Click(object sender, RoutedEventArgs e)
@@ -164,12 +170,8 @@ namespace JigGenerator.UI
                 // still not set? cancel
                 if (string.IsNullOrWhiteSpace(emptyFilePath.Text)) return;
             }
-            // Load the options
-            var options = GatherOptions();
 
-            // Pass them to the drawing class which returns the SvgDocument
-            var manager = new DrawingManager();
-            var doc = manager.CreateDocument(options);
+            var doc = GenerateDocument();
 
             // Save it to a file
             File.WriteAllText(emptyFilePath.Text, doc.GetXML());
@@ -192,6 +194,38 @@ namespace JigGenerator.UI
             }
 
             templateLayerId.BorderBrush = null;
+
+            try
+            {
+                var templatedoc = SvgDocument.Open(templateFilePath.Text);
+
+                var targetLayer = templatedoc.GetElementById<SvgGroup>(templateLayerId.Text);
+
+                if (targetLayer != null)
+                {
+                    var doc = GenerateDocument();
+
+                    foreach (var child in doc.Children)
+                    {
+                        targetLayer.Children.Add(child);
+                    }
+
+                    File.WriteAllText(templateFilePath.Text, templatedoc.GetXML());
+
+                    statusText.Text = "File saved!";
+                }
+                else
+                {
+                    statusText.Text = $"Layer {templateLayerId.Text} not found in document";
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+
+                statusText.Text = ex.Message;
+            }     
 
         }
     }
