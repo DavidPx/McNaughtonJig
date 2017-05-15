@@ -45,9 +45,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DegreeTrig.cs" />
+    <Compile Include="Parts\CircleTown.cs" />
     <Compile Include="Parts\Part.cs" />
     <Compile Include="Parts\Pointer.cs" />
     <Compile Include="Parts\Protractor.cs" />
+    <Compile Include="Parts\DebugTurretMount.cs" />
     <Compile Include="Primitives\Arcs.cs" />
     <Compile Include="Primitives\Circles.cs" />
     <Compile Include="Primitives\Colors.cs" />

@@ -26,7 +26,7 @@ namespace JigGenerator.UI
 
             if (options.TurretMount.MakeJumoAndStandard)
             {
-                var bigTurret = TurretMount.JumboAndStandard(options.FastenerDiameter);
+                var bigTurret = TurretMount.Large(options.FastenerDiameter);
                 bigTurret.Create();
                 bigTurret.Transforms.Add(new SvgTranslate(width * 2 / 3, width * 2 / 3));
                 doc.Children.Add(bigTurret);
@@ -34,7 +34,7 @@ namespace JigGenerator.UI
 
             if (options.TurretMount.MakeMini)
             {
-                var mini = TurretMount.Mini(options.FastenerDiameter);
+                var mini = TurretMount.Small(options.FastenerDiameter);
                 mini.Create();
                 mini.Transforms.Add(new SvgTranslate(width, height));
                 doc.Children.Add(mini);

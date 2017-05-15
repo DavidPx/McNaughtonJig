@@ -1,19 +1,14 @@
-﻿using JigGenerator.Drawing;
-using JigGenerator.Drawing.Parts;
+﻿using JigGenerator.Drawing.Parts;
+using JigGenerator.Drawing.Primitives;
 using Svg;
 using Svg.Transforms;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JigGenerator
 {
     class Program
     {
-        private const int boltDiameter = 6;
+        private const float boltDiameter = 4.9f; // #10 is 0.19", or 4.826mm
 
         static void Main(string[] args)
         {
@@ -28,12 +23,33 @@ namespace JigGenerator
             spacer.Create();
             spacer.Transforms.Add(new SvgTranslate(p1Size / 3, p1Size / 3));
             doc.Children.Add(spacer);
-            
 
-            var bigTurret = TurretMount.JumboAndStandard(boltDiameter);
+            var circles = new CircleTown();
+            circles.Create();
+            doc.Children.Add(circles);
+
+            var turretX = p1Size * 2 / 3;
+            float turretY = p1Size * 2 / 3;
+            var bigTurret = TurretMount.Large(boltDiameter);
             bigTurret.Create();
-            bigTurret.Transforms.Add(new SvgTranslate(p1Size * 2 / 3, p1Size * 2 / 3));
+            
+            bigTurret.Transforms.Add(new SvgTranslate(turretX, 0));
             doc.Children.Add(bigTurret);
+
+            var standardTurret = TurretMount.Standard(boltDiameter);
+            standardTurret.Create();
+            standardTurret.Transforms.Add(new SvgTranslate(turretX + 150f.Px(), 0));
+            doc.Children.Add(standardTurret);
+
+            var smallTurret = TurretMount.Small(boltDiameter);
+            smallTurret.Create();
+            smallTurret.Transforms.Add(new SvgTranslate(turretX + 300f.Px(), 0));
+            doc.Children.Add(smallTurret);
+
+            var miniTurret = TurretMount.Mini(boltDiameter);
+            miniTurret.Create();
+            miniTurret.Transforms.Add(new SvgTranslate(turretX + 450f.Px(), 0));
+            doc.Children.Add(miniTurret);
 
             var protractor = new Protractor(boltDiameter, 20, 12, 10);
             protractor.Create();

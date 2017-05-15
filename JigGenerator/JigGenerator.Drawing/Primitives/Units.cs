@@ -2,9 +2,9 @@
 
 namespace JigGenerator.Drawing.Primitives
 {
-    internal static class Units
+    public static class Units
     {
-        internal static SvgUnit Mm(float valueInMm)
+        public static SvgUnit Mm(float valueInMm)
         {
             return new SvgUnit(SvgUnitType.Millimeter, valueInMm);
         }
@@ -14,7 +14,7 @@ namespace JigGenerator.Drawing.Primitives
         /// </summary>
         /// <param name="millimeters"></param>
         /// <returns></returns>
-        internal static float Px(this float millimeters)
+        public static float Px(this float millimeters)
         {
 
             // In Inkscape a 50mm shift resulted in a 227.95276 value in translate.  But this was apparently wrong??
