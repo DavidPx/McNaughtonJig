@@ -13,10 +13,11 @@ namespace JigGenerator.UI
     public partial class MainWindow : Window
     {
         private FileInfo destination;
+        private JigOptions options;
 
         public MainWindow()
         {
-            InitializeComponent();
+            
 
             var defaultDrawingPath = Properties.Settings.Default["DefaultDrawingPath"] as string;
 
@@ -26,12 +27,20 @@ namespace JigGenerator.UI
             }
 
             destination = new FileInfo(defaultDrawingPath);
+
+            options = new JigOptions();
+
+            DataContext = options;
+
+            //SetOptions(new JigOptions());
+
+            InitializeComponent();
         }
         
         private SvgDocument GenerateDocument()
         {
             // Load the options
-            var options = GatherOptions();
+            //var options = GatherOptions();
 
             // Pass them to the drawing class which returns the SvgDocument
             var manager = new DrawingManager();
@@ -41,7 +50,8 @@ namespace JigGenerator.UI
 
         private void SaveOptions_Click(object sender, RoutedEventArgs e)
         {
-            var options = GatherOptions();
+            //var options = GatherOptions();
+            
 
             var optionsManager = new OptionsManager();
             optionsManager.SaveOptions(options);
@@ -59,7 +69,7 @@ namespace JigGenerator.UI
 
             if (filePrompt.ShowDialog().GetValueOrDefault(false))
             {
-                var options = GatherOptions();
+                //var options = GatherOptions();
                 var optionsManager = new OptionsManager();
                 var selectedFile = new FileInfo(filePrompt.FileName);
                 optionsManager.SaveOptions(options, selectedFile);
@@ -91,23 +101,14 @@ namespace JigGenerator.UI
         private void LoadOptions_Click(object sender, RoutedEventArgs e)
         {
             var optionsManager = new OptionsManager();
-            var options = optionsManager.LoadOptions();
+            var loadedOptions = optionsManager.LoadOptions();
 
-            if (options == null) return;
+            if (loadedOptions == null) return;
 
             // TODO set all the fields using the options object
+            options = loadedOptions;
         }
-
-        private JigOptions GatherOptions()
-        {
-            return new JigOptions();
-        }
-
-        private void UseOptions(JigOptions options)
-        {
-
-        }
-
+        
         private void LoadOptionsFrom_Click(object sender, RoutedEventArgs e)
         {
             var filePrompt = new Microsoft.Win32.OpenFileDialog
@@ -123,9 +124,7 @@ namespace JigGenerator.UI
                 var selectedFile = new FileInfo(filePrompt.FileName);
 
                 var optionsManager = new OptionsManager();
-                var options = optionsManager.LoadOptions(selectedFile);
-
-                UseOptions(options);
+                options = optionsManager.LoadOptions(selectedFile);
             }
         }
 

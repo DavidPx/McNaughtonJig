@@ -39,7 +39,8 @@ namespace JigGenerator.Drawing.Primitives
                 EndX = endX.Px(),
                 EndY = endY.Px(),
                 Stroke = color,
-                StrokeWidth = Units.Mm(Constants.Kerf)
+                StrokeWidth = Units.Mm(Constants.Kerf),
+                Fill = SvgPaintServer.None,
             };
         }
 

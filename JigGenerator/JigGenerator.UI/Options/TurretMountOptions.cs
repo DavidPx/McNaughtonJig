@@ -5,15 +5,17 @@ namespace JigGenerator.UI.Options
     [Serializable]
     public class TurretMountOptions
     {
-        public bool MakeJumoAndStandard { get; set; }
-        public bool MakeMini { get; set; }
+        public float PostGap { get; set; }
+        public string Label { get; set; }
+        public CutterSize CutterSize { get; set; }
+        public bool IncludeInDrawing { get; set; }
+    }    
 
-        public TurretMountOptions()
-        {
-            MakeMini = false;
-            MakeJumoAndStandard = true;
-        }
+    public enum CutterSize
+    {
+        Large,
+        Standard,
+        Small,
+        Mini
     }
-
-    
 }

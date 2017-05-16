@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace JigGenerator.UI.Options
 {
@@ -16,7 +17,7 @@ namespace JigGenerator.UI.Options
 
         public DrawingOptions Drawing { get; set; }
 
-        public TurretMountOptions TurretMount { get; set; }
+        public IList<TurretMountOptions> TurretMounts { get; set; }
         
         public JigOptions()
         {
@@ -24,7 +25,37 @@ namespace JigGenerator.UI.Options
             Protractor = new ProtractorOptions();
             Pointer = new PointerOptions();
             Drawing = new DrawingOptions();
-            TurretMount = new TurretMountOptions();
+            TurretMounts = new List<TurretMountOptions>
+            {
+                new TurretMountOptions
+                {
+                    CutterSize = CutterSize.Mini,
+                    IncludeInDrawing = false,
+                    Label = "Mini",
+                    PostGap = 3.26f
+                },
+                new TurretMountOptions
+                {
+                    CutterSize = CutterSize.Small,
+                    IncludeInDrawing = false,
+                    Label = "Small",
+                    PostGap = 5.17f
+                },
+                new TurretMountOptions
+                {
+                    CutterSize = CutterSize.Standard,
+                    IncludeInDrawing = true,
+                    Label = "Standard",
+                    PostGap = 6f
+                },
+                new TurretMountOptions
+                {
+                    CutterSize = CutterSize.Large,
+                    IncludeInDrawing = true,
+                    Label = "Large",
+                    PostGap = 5.94f
+                }
+            };
         }
     }
 }

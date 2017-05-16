@@ -4,26 +4,71 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:JigGenerator.UI"
-        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="JigGenerator.UI.MainWindow"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" 
+        xmlns:Options="clr-namespace:JigGenerator.UI.Options" 
+        x:Class="JigGenerator.UI.MainWindow"
         mc:Ignorable="d"
         Title="McNaughton Center Saver Jig Generator" Height="473.667" Width="550.167">
     <Window.Resources>
         <Thickness x:Key="LabelPadding">1</Thickness>
         <System:Double x:Key="LabelFontSize">10</System:Double>
     </Window.Resources>
-    <Grid>
+    <DockPanel>
 
-        <DockPanel HorizontalAlignment="Left" VerticalAlignment="Top">
-            <Menu DockPanel.Dock="Top">
-                <MenuItem Header="_Prefernces">
-                    <MenuItem Header="Save Current Options" Click="SaveOptions_Click" />
-                    <MenuItem Header="Save Current Options To..." Click="SaveOptionsTo_Click"/>
-                    <MenuItem Header="Load Options" Click="LoadOptions_Click"/>
-                    <MenuItem Header="Load Options From..." Click="LoadOptionsFrom_Click" />
-                </MenuItem>
-            </Menu>
-        </DockPanel>
-        <GroupBox x:Name="SaveArea" Header="Save your Drawing" VerticalAlignment="Bottom" Margin="10,0,10,35">
+        <Menu DockPanel.Dock="Top" Margin="0,0,468,0">
+            <MenuItem Header="_Preferences" Width="70">
+                <MenuItem Header="Save Current Options" Click="SaveOptions_Click" />
+                <MenuItem Header="Save Current Options To..." Click="SaveOptionsTo_Click"/>
+                <MenuItem Header="Load Options" Click="LoadOptions_Click"/>
+                <MenuItem Header="Load Options From..." Click="LoadOptionsFrom_Click" />
+            </MenuItem>
+        </Menu>
+
+        <GroupBox Header="Protractor Options" DockPanel.Dock="Top" Margin="10,0">
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Major Divisions" FontSize="{DynamicResource LabelFontSize}"/>
+                <TextBox x:Name="protractorMajorDivisions" Width="25" Text="{Binding Protractor.MajorDivisions, StringFormat=\{0:D\}}" />
+                <Label Content="Minor Divisions" FontSize="{DynamicResource LabelFontSize}" Margin="10, 0, 0, 0"/>
+                <TextBox x:Name="protractorMinorDivisions" Width="25" Text="{Binding Protractor.MinorDivisions, StringFormat=\{0:D\}}" />
+                <Label Content="Arm Length (mm)" FontSize="{DynamicResource LabelFontSize}" Margin="10, 0, 0, 0"/>
+                <TextBox x:Name="protractorArmLength" Width="44" Text="{Binding Protractor.ArmLength, NotifyOnValidationError=True, StringFormat=\{0:F\}}" />
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="General" Margin="10, 0" DockPanel.Dock="Top">
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Fastener Diameter (mm)" FontSize="{DynamicResource LabelFontSize}" />
+                <TextBox x:Name="fastenerDiameter" Width="25" Text="{Binding FastenerDiameter, StringFormat=\{0:D\}}"/>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="Turret Mount" Margin="10, 0" DockPanel.Dock="Top">
+            <StackPanel Orientation="Vertical">
+                <Label Content="Mounts to Create" FontSize="{DynamicResource LabelFontSize}" />
+                <ListBox Name="turretMounts" ItemsSource="{Binding TurretMounts}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding CutterSize}" />
+                                <TextBox Text="{Binding CutterWidth, StringFormat=\{0:F\}}"/>
+                                <CheckBox Content="Include?"  IsThreeState="False"  />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="Pointer" Margin="10, 0" DockPanel.Dock="Top">
+            <StackPanel Orientation="Vertical">
+                <Label Content="Cutter Radii (mm)" FontSize="{DynamicResource LabelFontSize}" />
+                <ListBox Name="cutterRadii">
+                    
+                </ListBox>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox x:Name="SaveArea" Header="Save your Drawing" DockPanel.Dock="Top" Margin="10,0,10,35">
             <StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0">
@@ -36,7 +81,7 @@
                         <Label Content="Layer Id" FontSize="{DynamicResource LabelFontSize}" Padding="{DynamicResource LabelPadding}" />
                         <TextBox Width="60" x:Name="templateLayerId" />
                     </StackPanel>
-                    <Button Content="Save to Template" Name="saveToTemplateButton" Margin="10, 0, 0, 0" VerticalAlignment="Bottom"  Click="saveToTemplateButton_Click"/>
+                    <Button Content="Save to Template" x:Name="saveToTemplateButton" Margin="10, 0, 0, 0" VerticalAlignment="Bottom"  Click="saveToTemplateButton_Click"/>
                 </StackPanel>
 
                 <Separator Margin="0,10,0,2" />
@@ -48,15 +93,16 @@
                     </StackPanel>
 
                     <Button Content="Select..." x:Name="emptyFileSelectButton" Margin="10, 0, 0, 0" VerticalAlignment="Bottom" Click="emptyFileSelectButton_Click" />
-                    <Button Content="Save to Empty File" Name="emptyFileGenerate" Click="emptyFileGenerate_Click" Margin="10,0,0,0" VerticalAlignment="Bottom" />
+                    <Button Content="Save to Empty File" x:Name="emptyFileGenerate" Click="emptyFileGenerate_Click" Margin="10,0,0,0" VerticalAlignment="Bottom" />
                 </StackPanel>
             </StackPanel>
         </GroupBox>
-        <StatusBar Name="statusBar" Height="20" Margin="10,0,10,10" VerticalAlignment="Bottom">
+        <StatusBar x:Name="statusBar" Height="20" Margin="10,0,10,10" DockPanel.Dock="Bottom">
             <StatusBarItem>
-                <TextBlock Name="statusText" />
+                <TextBlock x:Name="statusText" />
             </StatusBarItem>
         </StatusBar>
 
-    </Grid>
+
+    </DockPanel>
 </Window>
