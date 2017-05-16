@@ -2,6 +2,7 @@
 using JigGenerator.UI.Options;
 using Svg;
 using Svg.Transforms;
+using System.Linq;
 
 namespace JigGenerator.UI
 {
@@ -24,7 +25,7 @@ namespace JigGenerator.UI
             doc.Children.Add(spacer);
 
 
-            if (options.TurretMounts.MakeLarge)
+            if (options.TurretMounts.Any(x => x.CutterSize == CutterSize.Large && x.IncludeInDrawing))
             {
                 var bigTurret = TurretMount.Large(options.FastenerDiameter);
                 bigTurret.Create();
@@ -32,7 +33,7 @@ namespace JigGenerator.UI
                 doc.Children.Add(bigTurret);
             }
 
-            if (options.TurretMounts.MakeMini)
+            if (options.TurretMounts.Any(x => x.CutterSize == CutterSize.Mini && x.IncludeInDrawing))
             {
                 var mini = TurretMount.Small(options.FastenerDiameter);
                 mini.Create();

@@ -47,12 +47,19 @@
                 <Label Content="Mounts to Create" FontSize="{DynamicResource LabelFontSize}" />
                 <ListBox Name="turretMounts" ItemsSource="{Binding TurretMounts}">
                     <ListBox.ItemTemplate>
+                        
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding CutterSize}" />
-                                <TextBox Text="{Binding CutterWidth, StringFormat=\{0:F\}}"/>
-                                <CheckBox Content="Include?"  IsThreeState="False"  />
-                            </StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="35"/>
+                                    <ColumnDefinition Width="45"/>
+                                    <ColumnDefinition Width="75"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="{Binding CutterSize}" Grid.Column="0" />
+                                <TextBox Width="25" Text="{Binding PostGap, StringFormat=\{0:F\}}" Grid.Column="1"/>
+                                <CheckBox Content="Include?"  IsThreeState="False" IsChecked="{Binding IncludeInDrawing}" Grid.Column="2" />
+                            </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
